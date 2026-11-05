@@ -1,4 +1,5 @@
 "use client";
+import { useSearchParams } from "next/navigation";
 import { Gavel, HelpCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuctionLive } from "@/hooks/useAuctionLive";
@@ -8,15 +9,17 @@ import { ConnectionBadge, PlayerImage, TeamLogo, Logo } from "@/components/share
 
 /**
  * All MYSTERY players as cards. The player currently on the block is marked "In Auction".
- * Public viewers get masked data from the public API; signed-in admins see full identities.
+ * Public viewers get masked data from the public API; signed-in admins and /super?key=<SUPER_VIEW_KEY> see full identities.
  */
 export default function MysteryBoard() {
   const { status, user } = useAuth();
   const isAdmin = status === "authenticated" && user?.role === "ADMIN" && !user.mustChangePassword;
+  const key = useSearchParams().get("key");
   const { state, connection } = useAuctionLive();
-  const url = status === "loading" ? null : isAdmin ? "/admin/players" : "/public/players";
+  const url = key ? "/public/super/players" : status === "loading" ? null : isAdmin ? "/admin/players" : "/public/players";
   // Refetch whenever the live auction state changes (player selected, sold, unsold...).
-  const { data, error, reload } = useResource(url, { playerType: "MYSTERY", limit: 200 }, state?.version);
+  const { data, error, reload } = useResource(url, key ? { key } : { playerType: "MYSTERY", limit: 200 }, state?.version);
+  const fullView = isAdmin || (key && data);
   const activeId = state?.player && ["LIVE", "PAUSED", "FINALIZING"].includes(state.status) ? state.player.id : null;
   const players = data?.rows;
 
@@ -28,13 +31,14 @@ export default function MysteryBoard() {
           <h1 className="mt-1 flex items-center gap-2 text-2xl font-semibold"><HelpCircle className="size-6 text-mystery" aria-hidden />Mystery Players</h1>
           <p className="mt-1 text-sm text-muted">
             {players ? `${players.length} mystery player${players.length === 1 ? "" : "s"}` : "Loading…"}
-            {isAdmin && " · Admin view: real identities shown"}
+            {fullView && " · Real identities shown"}
           </p>
         </div>
         <ConnectionBadge connection={connection} />
       </header>
 
-      {error?.code === "NO_SEASON" ? <EmptyState icon={HelpCircle} title="The auction hasn't been set up yet" description="Mystery players appear here once they are registered." />
+      {error?.code === "INVALID_KEY" ? <EmptyState icon={HelpCircle} title="This link is not valid" description="Ask the organiser for the current /super link." />
+        : error?.code === "NO_SEASON" ? <EmptyState icon={HelpCircle} title="The auction hasn't been set up yet" description="Mystery players appear here once they are registered." />
         : error && !data ? <ErrorState error={error} onRetry={reload} /> : !players ? <Skeleton rows={4} /> : !players.length ? (
         <EmptyState icon={HelpCircle} title="No mystery players" description="Players registered as MYSTERY appear here." />
       ) : (
