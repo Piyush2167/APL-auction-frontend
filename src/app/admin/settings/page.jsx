@@ -7,7 +7,7 @@ import { CheckCircle2, Play } from "lucide-react";
 import { useResource, useAction } from "@/hooks/useResource";
 import { useToast } from "@/contexts/ToastContext";
 import { post, patch, apiError } from "@/services/api/client";
-import { Button, Card, PageHeader, Field, Input, Select, Textarea, Skeleton, ErrorState, StatusBadge, ConfirmDialog } from "@/components/ui";
+import { Button, Card, PageHeader, Field, Input, Select, Textarea, Skeleton, ErrorState, StatusBadge, ConfirmDialog, Modal } from "@/components/ui";
 
 const int = (min, max) => z.coerce.number().int("Whole numbers only").min(min, `At least ${min}`).max(max, `At most ${max}`);
 const configSchema = z.object({
@@ -88,6 +88,7 @@ export default function SettingsPage() {
   const { pending, run } = useAction(toast);
   const { data, error, loading, reload } = useResource("/admin/season");
   const [confirm, setConfirm] = useState(null);
+  const [resetName, setResetName] = useState("");
   const cfg = data?.config;
   const status = data?.auctionStatus;
   const started = status && !["CREATED", "READY"].includes(status);
@@ -133,6 +134,11 @@ export default function SettingsPage() {
           </form>
         </Card>
 
+        <Card title="Reset this auction">
+          <p className="text-sm text-muted">Start this auction over from the beginning. All bids, sales, purse spending, Mystery Token use and resale requests are deleted, every player becomes available again at their base price, and the auction returns to <b>Created</b> (confirm and start it again). Teams, captains, players and settings are kept. This cannot be undone.</p>
+          <div className="mt-4"><Button variant="danger" onClick={() => { setResetName(""); setConfirm("reset"); }}>Reset auction</Button></div>
+        </Card>
+
         <Card title="Archive this auction">
           <p className="text-sm text-muted">Archive the auction when it is finished (or if it never started) so you can create a new one, for example for another sport. All players, bids, transactions and results are kept. Captains of this auction are signed out and can be assigned to teams in the next auction.</p>
           <div className="mt-4">
@@ -144,6 +150,16 @@ export default function SettingsPage() {
       <ConfirmDialog open={confirm === "confirm"} title="Confirm configuration?" confirmLabel="Confirm configuration" pending={pending === "confirm"}
         message={`Teams: ${cfg.teamCount}, purse ${cfg.teamPurse}, squad ${cfg.maxSquadSize}, base ${cfg.defaultBasePrice}, raises +${(cfg.bidIncrements || [3, 5]).join(" or +")}, finalization ${cfg.finalizationSeconds}s. Every team must have an active captain.`}
         onClose={() => setConfirm(null)} onConfirm={async () => { const r = await run("confirm", () => post("/admin/config/confirm"), "Configuration confirmed: auction is READY"); if (r.ok) { setConfirm(null); reload(); } }} />
+      <Modal open={confirm === "reset"} onClose={() => setConfirm(null)} title="Reset the auction?"
+        footer={<><Button onClick={() => setConfirm(null)} disabled={pending === "reset"}>Cancel</Button>
+          <Button variant="danger" pending={pending === "reset"} disabled={resetName.trim() !== data.season.name}
+            onClick={async () => { const r = await run("reset", () => post("/admin/auction/reset", { confirmName: resetName.trim() }), (d) => `Auction reset: ${d.removed.bids} bids and ${d.removed.ledgerEntries} ledger entries removed, ${d.removed.playersReset} players made available`); if (r.ok) { setConfirm(null); reload(); } }}>
+            Reset auction</Button></>}>
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-muted">Everything that happened in this auction (bids, sales, purse spending, Mystery Token use, resale requests) is permanently deleted. Teams, captains, players and settings stay.</p>
+          <Field label={`Type "${data.season.name}" to confirm`}>{(a) => <Input {...a} value={resetName} onChange={(e) => setResetName(e.target.value)} autoComplete="off" />}</Field>
+        </div>
+      </Modal>
       <ConfirmDialog open={confirm === "archive"} title={`Archive ${data.season.name}?`} confirmLabel="Archive auction" tone="danger" pending={pending === "archive"}
         message="This auction becomes read-only history and its captains are signed out. You can then create a new auction."
         onClose={() => setConfirm(null)} onConfirm={async () => { const r = await run("archive", () => post("/admin/season/archive"), "Auction archived. You can now create a new one."); if (r.ok) { setConfirm(null); reload(); } }} />

@@ -12,7 +12,7 @@ const schema = z.object({
   skill: z.string().min(1, "Choose a skill"),
   gender: z.enum(["Male", "Female", "Other"]),
   playerType: z.enum(["NORMAL", "MYSTERY"]),
-  image: z.union([z.literal(""), z.url("Enter a full https:// URL")]),
+  image: z.union([z.literal(""), z.string().regex(/^\/players\/[\w.-]+$/), z.url("Enter a full https:// URL")]),
 });
 
 export async function uploadImage(file) {
@@ -78,7 +78,7 @@ export default function PlayerForm({ open, onClose, player, categories, defaultB
           </div>
         )}
         <div className="sm:col-span-2 flex flex-col gap-2">
-          <Field label="Image URL" error={errors.image?.message}>{(a) => <Input {...a} type="url" placeholder="https://" {...register("image")} />}</Field>
+          <Field label="Image URL" error={errors.image?.message}>{(a) => <Input {...a} type="text" placeholder="https://" {...register("image")} />}</Field>
           <label className="inline-flex w-fit cursor-pointer items-center gap-2 text-sm text-accent hover:underline">
             <input type="file" accept="image/png,image/jpeg,image/webp" className="sr-only" onChange={onFile} disabled={uploading} />
             {uploading ? "Uploading…" : "Or upload an image (PNG, JPEG, WebP, max 3 MB)"}
