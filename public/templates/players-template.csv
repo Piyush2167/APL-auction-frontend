@@ -1,0 +1,3 @@
+name,gender,category,battingStyle,bowlingStyle,skills,publicSkills,experience,registrationId,basePrice,playerType,image
+Rahul Sharma,Male,Batsman,Right-hand bat,,Opener;Anchor,,3 seasons,APL-001,20,NORMAL,
+Amit Kumar,Male,Bowler,,Right-arm fast,Yorkers;Swing,Swing,5 seasons,APL-002,30,MYSTERY,

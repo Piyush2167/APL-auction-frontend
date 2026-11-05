@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* Design tokens. Use these (bg-surface, text-muted, border-line, bg-primary...) instead of raw palette colors. */
+@theme {
+  /* light system shared with the landing page (public/index.html): white ground, navy ink, one orange accent */
+  --color-bg: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f0ed;
+  --color-line: #e2e4ea;
+  --color-fg: #1f2b4d;
+  --color-muted: #5f667c;
+  --color-primary: #f7941d;
+  --color-primary-fg: #1f2b4d;
+  --color-accent: #a4540a; /* orange for text: 4.9:1 on white, where --color-primary would read 2.2:1 */
+  --color-ink: #1f2b4d;
+  --color-success: #15803d;
+  --color-danger: #c62828;
+  --color-warning: #a35f00;
+  --color-info: #0b6aa8;
+  --color-mystery: #be185d;
+  --font-sans: var(--font-text), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-text), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  --radius-xl: 1rem;
+}
+
+html { color-scheme: light; }
+body { background: var(--color-bg); color: var(--color-fg); }
+h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; }
+
+:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media print {
+  body { background: #fff; color: #000; }
+  .no-print { display: none !important; }
+  .print-area { color: #000; }
+  .print-area * { color: #000 !important; background: transparent !important; border-color: #999 !important; }
+}
