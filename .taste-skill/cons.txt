@@ -1,0 +1,306 @@
+consistency  D:\Nexcore Alliance\Auction website\apl-auction-season-8\frontend\public\index.html
+
+1440x900  10 screens  3 FAIL  17 WARN
+  FAIL scroll-reveal   section#sync > div.wrap > div.sync-dg.fill > div.dg  "Bid 150 pts Server Captains 8 online Adm"
+       starts "border-bottom-color" (0.2 s) the moment it is scrolled into view (an IntersectionObserver) on div.dg-node.dg-node--pill:nth-of-type(3)  [1440-13-scroll-reveal.jpg]
+       fix: show it at rest: no fade, rise or unmask when it is scrolled into view
+  FAIL section-gaps    section#rules / section#sync
+       323px between these sections, +63% against the median 199px of gaps at a change of ground  [1440-11-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  FAIL section-gaps    section#faq / footer#contact
+       426px between these sections, +115% against the median 199px  [1440-15-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN nav             header.nav > div.wrap.nav__bar > a.nav__logo  "A APL Auction"
+       the nav is lopsided: its first item starts 6px inside the content's edge (80px), while its last ends on the other edge  [1440-01-nav.jpg]
+       fix: start the nav's first item and end its last on the content's two edges
+  WARN cut-text        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__body  "Bought for 180 pts"
+       cut 14px at the bottom by the overflow of div.group > div.grid > article.card.card--row:nth-of-type(1) > div.panel: a fragment run out through its panel's edge  [1440-09-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN same-action     div.wrap > div.grid > p.span-6.start-7 > a.link  "Watch live"
+       "Watch live" is a button in one place and a text link in another: one action in two looks  [1440-05-same-action.jpg]
+       fix: show one action one way: the same button wherever it repeats, or a text link everywhere
+  WARN text-contrast   div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(3) > span.ui-win__st  "Bidding"
+       10 lines of text in drawn mocks read under 4.5:1 (3 colour pairs), the worst "Bidding" in #ba7a43 on #fff2e6 at 3.21:1  [1440-06-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    section#rules / section#sync
+       uneven space at the edge of a band: 207px outside its edge, 116px inside it (the space on either side of a change of ground reads as one gap only when the two match)  [1440-12-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN links           div.nav__item:nth-of-type(1) > div.nav__menu > div.wrap.grid > a.menu-card.span-3  "MTMumbai Tigers bid 140 ptsnowArjun Iyer"
+       "MTMumbai Tigers bid 140 ptsnowArjun Iyer" goes to /audience, which does not exist here
+       fix: point every link at a real section, page or file
+  WARN links           header.nav > div.wrap.nav__bar > div.nav__actions > a.nav__link  "Sign in"
+       "Sign in" goes to /login, which does not exist here  [1440-02-links.jpg]
+       fix: point every link at a real section, page or file
+  WARN links           div.span-2.footer__col:nth-of-type(5) > ul > li:nth-of-type(2) > a  "Reset password"
+       "Reset password" goes to /forgot-password, which does not exist here  [1440-14-links.jpg]
+       fix: point every link at a real section, page or file
+  WARN nav-labels      div.nav__menu > div.wrap.grid > div.menu-col.span-3:nth-of-type(1) > a:nth-of-type(2)  "ScreensOne state on every device"
+       "ScreensOne state on every device" opens a section headed "Live sync across every screen"
+       fix: name each nav link after the heading of the section it opens
+  WARN nav-labels      div.nav__menu > div.wrap.grid > div.menu-col.span-3:nth-of-type(2) > a:nth-of-type(2)  "RulesPurse, squads and bid steps"
+       "RulesPurse, squads and bid steps" opens a section headed "Season 8 auction rules"
+       fix: name each nav link after the heading of the section it opens
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Watch live"
+       its label sits 18px off-centre (25px of room at the left, 43px at the right) (and 1 more like it: "Watch live")  [1440-03-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+  WARN stranded-action div.wrap > div.hero-text.grid > div.span-3.start-10 > a.btn.btn--primary  "Watch live"
+       stands 802px across from the nearest text of its block ("APL Season 8 live player aucti")  [1440-04-stranded-action.jpg]
+       fix: put the button under or beside the text it belongs to
+  WARN fade-cut        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__title  "Meera Rao joined your squad 2m"
+       2 lines of div.ui.ui-notify fade out under its edge ("Meera Rao joined your ", "2m"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [1440-10-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  WARN nav-current     header.nav
+       the nav stays on screen with 5 links to the page's sections, but never marks the one you are in (no link changes as the page scrolls)  [1440-07-nav-current.jpg]
+       fix: mark the link of the section on screen (a colour, a weight or a line under it) as the visitor scrolls
+  WARN loop-cycle      section#live > div.wrap > div.ui.app > div.app__pane.app__pane--list
+       a fragment loop of 0.8 s: under the 2.5-4 s cycle, it reads as blinking  [1440-08-loop-cycle.jpg]
+       fix: set the loop's cycle to 2.5-4 s (--m-cycle) with every keyframe on it, repeating
+  WARN section-air     section#roles / section#rules
+       495px of air between the content of these two sections: 128-480px (64-600px WARN) (SR-3)  [1440-rhythm-01-section-air.jpg]
+       fix: keep 128-480px of air between the content of neighbouring sections (112-420px on a phone): the sections' padding (--padt, --padb)
+  WARN section-air     section#faq  "Questions What captains and viewers ask "
+       the content fills 43.4% of the section's height (391 of 900px): 55% or more (40% WARN) (SR-3)  [1440-rhythm-02-section-air.jpg]
+       fix: fill the section to 55%: more content, a picture or a background layer, or merge it into the section above as its last block
+
+1024x768  10 screens  1 FAIL  9 WARN
+  FAIL scroll-reveal   section#sync > div.wrap > div.sync-dg.fill > div.dg  "Bid 150 pts Server Captains 8 online Adm"
+       starts "border-bottom-color" (0.2 s) the moment it is scrolled into view (an IntersectionObserver) on div.dg-node.dg-node--pill:nth-of-type(3)  [1024-09-scroll-reveal.jpg]
+       fix: show it at rest: no fade, rise or unmask when it is scrolled into view
+  WARN nav             header.nav > div.wrap.nav__bar > a.nav__logo  "A APL Auction"
+       the nav is lopsided: its first item starts 6px inside the content's edge (80px), while its last ends on the other edge  [1024-01-nav.jpg]
+       fix: start the nav's first item and end its last on the content's two edges
+  WARN cut-text        div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(8) > span.ui-win__who  "Ananya Patil"
+       cut 14px at the bottom by the overflow of section#live > div.wrap > div.ui.app > div.app__pane.app__pane--list: a fragment run out through its panel's edge  [1024-06-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        div.ui.ui-notify > ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-avatar.ui-note__av  "MT"
+       cut 4px at the bottom by the overflow of div.group > div.grid > article.card.card--row:nth-of-type(1) > div.panel: a fragment run out through its panel's edge (and 1 more like it: "Arjun Iyer at 140 pts")  [1024-07-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN same-action     div.wrap > div.grid > p.span-6.start-7 > a.link  "Watch live"
+       "Watch live" is a button in one place and a text link in another: one action in two looks  [1024-03-same-action.jpg]
+       fix: show one action one way: the same button wherever it repeats, or a text link everywhere
+  WARN text-contrast   div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(3) > span.ui-win__st  "Bidding"
+       11 lines of text in drawn mocks read under 4.5:1 (3 colour pairs), the worst "Bidding" in #ba7a43 on #fff2e6 at 3.21:1  [1024-04-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    section#faq / footer#contact
+       278px between these sections, +41% against the median 197px  [1024-10-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Watch live"
+       its label sits 18px off-centre (25px of room at the left, 43px at the right) (and 1 more like it: "Watch live")  [1024-02-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+  WARN fade-cut        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__title  "Your bid leads 2m"
+       2 lines of div.ui.ui-notify fade out under its edge ("Your bid leads 2m", "2m"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [1024-08-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  WARN nav-current     header.nav
+       the nav stays on screen with 5 links to the page's sections, but never marks the one you are in (no link changes as the page scrolls)  [1024-05-nav-current.jpg]
+       fix: mark the link of the section on screen (a colour, a weight or a line under it) as the visitor scrolls
+
+820x1180  10 screens  2 FAIL  15 WARN
+  FAIL scroll-reveal   section#sync > div.wrap > div.sync-dg.fill > div.dg  "Bid 150 pts Server Captains 8 online Adm"
+       starts "border-bottom-color" (0.2 s) the moment it is scrolled into view (an IntersectionObserver) on div.dg-node.dg-node--pill:nth-of-type(3)  [820-14-scroll-reveal.jpg]
+       fix: show it at rest: no fade, rise or unmask when it is scrolled into view
+  FAIL section-gaps    section#roles / section#rules
+       573px between these sections, +122% against the median 258px  [820-09-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN cut-text        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__body  "Bought for 180 pts"
+       cut 14px at the bottom by the overflow of div.group > div.grid > article.card.card--row:nth-of-type(1) > div.panel: a fragment run out through its panel's edge (and 1 more like it: "Import players from CSV")  [820-06-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        div.ui.ui-panel > ul.ui-search__list > li.ui-search__row:nth-of-type(2) > span.ui-search__t  "Krishna Sharma, swing"
+       cut 9px at the bottom by the overflow of div.wrap > div.grid > article.card.card--row:nth-of-type(2) > div.panel: a fragment run out through its panel's edge (and 2 more like it: "swing", "30 pts")  [820-10-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        ul.ui-toggles__list > li.ui-tg:nth-of-type(4) > span.ui-tg__text > span.ui-tg__sub  "Sent when a captain is added"
+       cut 11px at the bottom by the overflow of section#rules > div.wrap > div.grid.grid--top > div.span-6.start-7: a fragment run out through its panel's edge  [820-11-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN same-action     div.wrap > div.grid > p.span-6.start-7 > a.link  "Watch live"
+       "Watch live" is a button in one place and a text link in another: one action in two looks  [820-03-same-action.jpg]
+       fix: show one action one way: the same button wherever it repeats, or a text link everywhere
+  WARN text-contrast   div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(6) > span.ui-win__who  "Vihaan Kumar"
+       23 lines of text in drawn mocks read under 4.5:1 (6 colour pairs), the worst "Vihaan Kumar" in #1f2b4d on #1f2b4d at 1:1  [820-04-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    main#top > section.hero.hero--triptych / section#live
+       181px between these sections, -30% against the median 258px  [820-05-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#live / section#roles
+       189px between these sections, -27% against the median 258px  [820-07-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#faq / footer#contact
+       327px between these sections, +27% against the median 258px  [820-16-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#rules / section#sync
+       uneven space at the edge of a band: 72px outside its edge, 117px inside it (the space on either side of a change of ground reads as one gap only when the two match)  [820-12-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#sync / section#faq
+       uneven space at the edge of a band: 117px outside its edge, 72px inside it (the space on either side of a change of ground reads as one gap only when the two match)  [820-15-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Watch live"
+       its label sits 18px off-centre (25px of room at the left, 43px at the right) (and 1 more like it: "Watch live")  [820-01-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+  WARN stranded-action div.wrap > div.hero-text.grid > div.span-3.start-10 > a.btn.btn--primary  "Watch live"
+       stands 782px down from the nearest text of its block ("Eight team captains bid on cri")  [820-02-stranded-action.jpg]
+       fix: put the button under or beside the text it belongs to
+  WARN fade-cut        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__title  "Meera Rao joined your squad 2m"
+       2 lines of div.ui.ui-notify fade out under its edge ("Meera Rao joined your ", "2m"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [820-08-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  WARN fade-cut        ul.ui-toggles__list > li.ui-tg:nth-of-type(4) > span.ui-tg__text > span.ui-tg__label  "Email captain invites"
+       a line of div.ui.ui-panel fades out under its edge ("Email captain invites"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [820-13-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  WARN section-air     section#roles / section#rules
+       573px of air between the content of these two sections: 128-480px (64-600px WARN) (SR-3)  [820-rhythm-01-section-air.jpg]
+       fix: keep 128-480px of air between the content of neighbouring sections (112-420px on a phone): the sections' padding (--padt, --padb)
+
+768x1024  10 screens  4 FAIL  11 WARN
+  FAIL scroll-reveal   section#sync > div.wrap > div.sync-dg.fill > div.dg  "Bid 150 pts Server Captains 8 online Adm"
+       starts "border-bottom-color" (0.2 s) the moment it is scrolled into view (an IntersectionObserver) on div.dg-node.dg-node--pill:nth-of-type(3)  [768-13-scroll-reveal.jpg]
+       fix: show it at rest: no fade, rise or unmask when it is scrolled into view
+  FAIL section-gaps    section#roles / section#rules
+       417px between these sections, +105% against the median 203px  [768-08-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN cut-text        div.ui.ui-notify > ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-avatar.ui-note__av  "RS"
+       cut 4px at the bottom by the overflow of div.group > div.grid > article.card.card--row:nth-of-type(1) > div.panel: a fragment run out through its panel's edge (and 4 more like it: "Next valid bid 140 pts", "MT", "Arjun Iyer at 140 pts", "Import players from CSV")  [768-05-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        div.ui.ui-panel > ul.ui-search__list > li.ui-search__row:nth-of-type(2) > span.ui-search__t  "Krishna Sharma, swing"
+       cut 9px at the bottom by the overflow of div.wrap > div.grid > article.card.card--row:nth-of-type(2) > div.panel: a fragment run out through its panel's edge (and 2 more like it: "swing", "30 pts")  [768-09-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        ul.ui-toggles__list > li.ui-tg:nth-of-type(3) > span.ui-tg__text > span.ui-tg__label  "Show budgets to the audience"
+       cut 13px at the bottom by the overflow of section#rules > div.wrap > div.grid.grid--top > div.span-6.start-7: a fragment run out through its panel's edge  [768-10-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN no-visual       section#rules  "Season 8 auction rules"
+       pictures, effects and mocks cover 25% of this section; a feature section needs a visual (about 25% or more)  [768-11-no-visual.jpg]
+       fix: give the section a visual: a UI fragment on a ground, real icons, or a photograph that fits
+  WARN same-action     div.wrap > div.grid > p.span-6.start-7 > a.link  "Watch live"
+       "Watch live" is a button in one place and a text link in another: one action in two looks  [768-03-same-action.jpg]
+       fix: show one action one way: the same button wherever it repeats, or a text link everywhere
+  WARN text-contrast   div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(6) > span.ui-win__who  "Vihaan Kumar"
+       26 lines of text in drawn mocks read under 4.5:1 (7 colour pairs), the worst "Vihaan Kumar" in #1f2b4d on #1f2b4d at 1:1  [768-04-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    section#rules / section#sync
+       uneven space at the edge of a band: 72px outside its edge, 117px inside it (the space on either side of a change of ground reads as one gap only when the two match)  [768-12-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Watch live"
+       its label sits 18px off-centre (25px of room at the left, 43px at the right) (and 1 more like it: "Watch live")  [768-01-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+  WARN stranded-action div.wrap > div.hero-text.grid > div.span-3.start-10 > a.btn.btn--primary  "Watch live"
+       stands 627px down from the nearest text of its block ("Eight team captains bid on cri")  [768-02-stranded-action.jpg]
+       fix: put the button under or beside the text it belongs to
+  WARN fade-cut        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__title  "Royal Strikers bid 130 pts 2m"
+       2 lines of div.ui.ui-notify fade out under its edge ("Royal Strikers bid 130", "2m"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [768-06-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  WARN fade-cut        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__title  "Your bid leads 2m"
+       a line of div.ui.ui-notify fades out under its edge ("Your bid leads 2m"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [768-07-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  FAIL section-height  section#faq  "Questions What captains and viewers ask "
+       the section is 1069px tall (1 screens), 45px over one screen (1024px): every section after the hero is one screen or two, 2px either way (SR-2)  [768-rhythm-01-section-height.jpg]
+       fix: set the section to one screen or two (height: calc(var(--h,1) * 100vh), --h 1 or 2) and cut or split its content to fit
+  FAIL section-height  footer#contact  "Watch Season 8 live No account needed. T"
+       the section starts at 7213px, 45px below the screen grid (7 x 1024px): sections start on whole screens (SR-2)  [768-rhythm-02-section-height.jpg]
+       fix: make every section above it exactly one or two screens tall, so this one starts on a whole screen
+
+390x844  10 screens  9 FAIL  12 WARN
+  FAIL flush           div.grid.grid--top > div.faq.span-6 > div.faq__item:nth-of-type(4) > p  "Yes. Once the admin approves a resale re"
+       section#faq and footer#contact run together: -33px between their content, on one ground  [390-13-flush.jpg]
+       fix: give the section its padding at the edge where the ground changes (the closing call keeps a clear gap above the footer)
+  FAIL overlap-text    h2#close-h  "Watch Season 8 live"
+       lies over the text "Yes. Once the admin approves a resale re" (div.faq__item:nth-of-type(4) > p)  [390-14-overlap-text.jpg]
+       fix: move the box off the text (or the text off the box)
+  FAIL cut-text        div.dg-nodes > div.dg-node.dg-node--tile:nth-of-type(1) > span.dg-cap > span.dg-cap__l  "Bid"
+       runs past the edge of its box div.sync-dg.fill > div.dg > div.dg-nodes > div.dg-node.dg-node--tile:nth-of-type(1) (and 3 more like it: "Captains", "Admin", "Audience")  [390-12-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  FAIL section-gaps    section#roles / section#rules
+       532px between these sections, +277% against the median 141px  [390-09-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN cut-text        div.ui.ui-notify > ul.ui-notify__list > li.ui-note:nth-of-type(1) > span.ui-avatar.ui-note__av  "MT"
+       cut 8px at the top by the overflow of div.group > div.grid > article.card.card--row:nth-of-type(1) > div.panel: a fragment run out through its panel's edge (and 1 more like it: "Bid 150")  [390-04-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__body  "Bought for 180 pts"
+       cut 13px at the bottom by the overflow of div.group > div.grid > article.card.card--row:nth-of-type(1) > div.panel: a fragment run out through its panel's edge  [390-05-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN cut-text        div.ui.ui-panel > ul.ui-search__list > li.ui-search__row:nth-of-type(1) > span.ui-search__t  "Riya Kulkarni, swing"
+       cut 11px at the bottom by the overflow of div.wrap > div.grid > article.card.card--row:nth-of-type(2) > div.panel: a fragment run out through its panel's edge (and 2 more like it: "swing", "20 pts")  [390-07-cut-text.jpg]
+       fix: give the text room: no overflow clipping a line, no line past its box
+  WARN same-action     div.wrap > div.grid > p.span-6.start-7 > a.link  "Watch live"
+       "Watch live" is a button in one place and a text link in another: one action in two looks  [390-03-same-action.jpg]
+       fix: show one action one way: the same button wherever it repeats, or a text link everywhere
+  WARN cta             section#roles  "Three roles, one auction."
+       a section over 1.5 screens long with no link or button in it  [390-08-cta.jpg]
+       fix: add the action: a button in the hero, one on every priced item, one in the closing section
+  WARN text-contrast   ul.ui-toggles__list > li.ui-tg:nth-of-type(4) > span.ui-tg__text > span.ui-tg__label  "Email captain invites"
+       4 lines of text in drawn mocks read under 4.5:1 (3 colour pairs), the worst "Email captain invites" in #1f2b4d on #05070a at 1.45:1  [390-10-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    section#faq / footer#contact
+       the sections overlap by 33px  [390-15-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#rules / section#sync
+       uneven space at the edge of a band: 48px outside its edge, 93px inside it (the space on either side of a change of ground reads as one gap only when the two match)  [390-11-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Watch live"
+       its label sits 18px off-centre (13px of room at the left, 31px at the right)  [390-01-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+  WARN stranded-action div.wrap > div.hero-text.grid > div.span-3.start-10 > a.btn.btn--primary  "Watch live"
+       stands 474px down from the nearest text of its block ("Eight team captains bid on cri")  [390-02-stranded-action.jpg]
+       fix: put the button under or beside the text it belongs to
+  WARN fade-cut        ul.ui-notify__list > li.ui-note:nth-of-type(3) > span.ui-note__text > span.ui-note__title  "Meera Rao joined your squad 2m"
+       2 lines of div.ui.ui-notify fade out under its edge ("Meera Rao joined your ", "2m"): drawn at a fraction of #1f2b4d on #fffffe, half-erased  [390-06-fade-cut.jpg]
+       fix: fit the mock's rows inside its panel (fewer rows, a taller panel), or end the fade below the last whole row: no row half-erased
+  FAIL section-height  section#faq  "Questions What captains and viewers ask "
+       the section's content does not fit it: its content is 145px taller than the section (scrollHeight 989, clientHeight 844); its lowest content ends 970px below its top, past 796px (the section less 48px of bottom padding); 7 parts lie outside the section's box (SR-2)  [390-rhythm-01-section-height.jpg]
+       fix: fit the content above the section's bottom padding (--padb), or make it two screens (.g2) in two groups
+  FAIL section-height  section#faq > div.wrap > div.grid.grid--top  "Questions What captains and viewers ask "
+       "Questions What captains and view" lies outside section 6 (96 to 989px from its top; the section is 844px tall) (SR-2)  [390-rhythm-02-section-height.jpg]
+       fix: fit the content above the section's bottom padding (--padb), or make it two screens (.g2) in two groups
+  FAIL section-height  section#faq > div.wrap > div.grid.grid--top > div.faq.span-6  "Who can bid in the auction?Only team cap"
+       "Who can bid in the auction?Only " lies outside section 6 (517 to 989px from its top; the section is 844px tall) (and 1 more like it: "What is a mystery player") (SR-2)  [390-rhythm-03-section-height.jpg]
+       fix: fit the content above the section's bottom padding (--padb), or make it two screens (.g2) in two groups
+  WARN section-air     section#roles / section#rules
+       532px of air between the content of these two sections: 112-420px (56-560px WARN) (SR-3)  [390-rhythm-06-section-air.jpg]
+       fix: keep 128-480px of air between the content of neighbouring sections (112-420px on a phone): the sections' padding (--padt, --padb)
+  FAIL one-section     section#faq  "Questions What captains and viewers ask "
+       the screen at scroll 5908px (stride 7) shows 89px of section 6 and the content of 2 sections, over 24px each beside section 7: a screen shows one section (another may peek 8px, 24px WARN) (SR-4)  [390-rhythm-04-one-section.jpg]
+       fix: make each section exactly one screen or two, so a screen shows one section and no neighbour peeks
+  FAIL one-heading     h2#roles-h  "Three roles, one auction. Captains bid, "
+       headings of two sections show whole on one screen at 7 of 119 scroll positions (5.9%; at scroll 1000, 1050, 1100, 1150px), here with "140 pts": at most 5% on a phone (SR-5)  [390-rhythm-05-one-heading.jpg]
+       fix: make the sections one screen tall so their headings sit a screen apart and two never share one
+
+first screen at 1280, 1152, 896  0 FAIL  0 WARN
+
+checks
+  PASS assets                 PASS shader-lint            PASS gl-fallback            
+  PASS empty-visual           PASS hero-fill              FAIL flush                  
+  PASS placeholder            PASS sample-label           PASS caption                
+  PASS credit-wall            WARN nav                    PASS nav-covers             
+  PASS spill                  PASS off-viewport           PASS fold-card              
+  PASS hover-spill            FAIL overlap-text           PASS row-gap                
+  FAIL cut-text               PASS fold-cut               PASS marquee                
+  PASS scroll-linked          FAIL scroll-reveal          PASS pinned                 
+  PASS loop-pause             PASS reduced-motion         PASS hidden-content         
+  PASS webgl                  WARN no-visual              PASS text-only              
+  PASS card-visual            PASS hidden-visual          PASS card-family            
+  PASS card-layout            PASS nesting                PASS effect-repeat          
+  PASS ui-fit                 PASS ui-centre              PASS dark-ground            
+  PASS button-styles          PASS button-shape           WARN same-action            
+  PASS button-picture         WARN cta                    PASS pricing-tiers          
+  PASS copy-headline          PASS copy-fact              PASS copy-headings          
+  PASS copy-buttons           PASS copy-actions           PASS heading-scale          
+  PASS stagger                PASS top-stagger            PASS off-grid               
+  PASS col-edge               PASS right-edge             PASS centre-axis            
+  PASS tilt                   PASS contrast               WARN text-contrast          
+  PASS body-size              PASS busy-ground            FAIL section-gaps           
+  PASS proximity              PASS hole                   WARN links                  
+  PASS forms                  PASS photo-upscale          PASS photo-set              
+  PASS photo-credit           PASS nav-family             WARN nav-labels             
+  PASS link-styles            PASS heading-align          WARN label-centre           
+  PASS fake-button            WARN stranded-action        PASS orphan                 
+  PASS unit-break             PASS tab-wrap               PASS effects-fit            
+  WARN fade-cut               PASS photo-weight           PASS copy-length            
+  WARN nav-current            PASS progress-bar           PASS photo-repeat           
+  PASS button-contrast        PASS photo-print            PASS grounds                
+  PASS split-align            PASS fact-agree             PASS fold-action            
+  PASS action-count           PASS one-screen             PASS hover                  
+  PASS hover-move             PASS product-shown          PASS same-object            
+  PASS font-load              PASS visual-caption         PASS visual-empty           
+  PASS effect-kind            PASS street-number          PASS postcode               
+  PASS coordinates            PASS company-number         PASS phone-number           
+  PASS hero-screen            FAIL section-height         WARN section-air            
+  FAIL one-section            FAIL one-heading            PASS container-edges        
+  PASS row-lines              PASS split-pair             PASS motion-layer           
+  PASS count-text             WARN loop-cycle             PASS section-tile           
+
+total  19 FAIL  64 WARN  (crops and report.json in D:\Nexcore Alliance\Auction website\apl-auction-season-8\frontend\public\.taste-skill\consistency)

@@ -12,7 +12,7 @@ import { Button, Card, PageHeader, Field, Input, Select, Textarea, Skeleton, Err
 const int = (min, max) => z.coerce.number().int("Whole numbers only").min(min, `At least ${min}`).max(max, `At most ${max}`);
 const configSchema = z.object({
   teamCount: int(2, 32), teamPurse: int(1, 10000000), maxSquadSize: int(1, 50), defaultBasePrice: int(0, 1000000),
-  bidIncrement: int(1, 1000000), finalizationSeconds: int(0, 30),
+  bidIncrements: z.string().regex(/^\s*[1-9]\d*(\s*,\s*[1-9]\d*){0,3}\s*$/, "Whole numbers, comma separated, e.g. 3, 5"), finalizationSeconds: int(0, 30),
   publicBudgetVisible: z.enum(["true", "false"]), resaleEnabled: z.enum(["true", "false"]), mysteryEnabled: z.enum(["true", "false"]),
   categories: z.string().min(2, "At least one category"),
   reason: z.string().max(300).optional(),
@@ -26,11 +26,11 @@ const SPORT_LABEL = { CRICKET: "Cricket", FOOTBALL: "Football" };
 const FIN = ["teamCount", "teamPurse", "maxSquadSize", "defaultBasePrice", "categories"];
 const toBody = (d) => ({
   teamCount: d.teamCount, teamPurse: d.teamPurse, maxSquadSize: d.maxSquadSize, defaultBasePrice: d.defaultBasePrice,
-  bidIncrement: d.bidIncrement, finalizationSeconds: d.finalizationSeconds,
+  bidIncrements: d.bidIncrements.split(",").map((n) => Number(n.trim())).filter((n) => n > 0), finalizationSeconds: d.finalizationSeconds,
   publicBudgetVisible: d.publicBudgetVisible === "true", resaleEnabled: d.resaleEnabled === "true", mysteryEnabled: d.mysteryEnabled === "true",
   categories: d.categories.split(",").map((c) => c.trim()).filter(Boolean),
 });
-const DEFAULTS = { teamCount: 8, teamPurse: 500, maxSquadSize: 7, defaultBasePrice: 20, bidIncrement: 10, finalizationSeconds: 0, publicBudgetVisible: "true", resaleEnabled: "true", mysteryEnabled: "true", categories: "Batsman, Bowler, All-rounder, Wicketkeeper, Fielder" };
+const DEFAULTS = { teamCount: 8, teamPurse: 500, maxSquadSize: 7, defaultBasePrice: 20, bidIncrements: "3, 5", finalizationSeconds: 0, publicBudgetVisible: "true", resaleEnabled: "true", mysteryEnabled: "true", categories: "Batsman, Bowler, All-rounder, Wicketkeeper, Fielder" };
 
 function ConfigFields({ register, errors, started }) {
   const lock = (k) => started && FIN.includes(k);
@@ -44,7 +44,7 @@ function ConfigFields({ register, errors, started }) {
       {num("teamPurse", "Team purse (points)", "Default for new teams")}
       {num("maxSquadSize", "Maximum squad size", "Default for new teams")}
       {num("defaultBasePrice", "Default base price")}
-      {num("bidIncrement", "Bid increment")}
+      <Field label="Bid raises (points)" hint="Captains pick one of these on every bid, e.g. 3, 5" error={errors.bidIncrements?.message}>{(a) => <Input {...a} inputMode="numeric" {...register("bidIncrements")} />}</Field>
       {num("finalizationSeconds", "SOLD delay (seconds)", "0 = sold immediately on click. Otherwise a visual countdown; bidding stays locked")}
       {yn("publicBudgetVisible", "Show team budgets to audience")}
       {yn("resaleEnabled", "Resale enabled")}
@@ -93,7 +93,7 @@ export default function SettingsPage() {
   const started = status && !["CREATED", "READY"].includes(status);
   const { register, handleSubmit, formState: { errors, isSubmitting, isDirty } } = useForm({
     resolver: zodResolver(configSchema),
-    values: cfg ? { ...Object.fromEntries(Object.keys(DEFAULTS).map((k) => [k, String(cfg[k])])), categories: cfg.categories.join(", "), reason: "" } : undefined,
+    values: cfg ? { ...Object.fromEntries(Object.keys(DEFAULTS).map((k) => [k, String(cfg[k])])), categories: cfg.categories.join(", "), bidIncrements: (cfg.bidIncrements || [3, 5]).join(", "), reason: "" } : undefined,
   });
 
   if (error && !data) return <ErrorState error={error} onRetry={reload} />;
@@ -142,7 +142,7 @@ export default function SettingsPage() {
         </Card>
       </div>
       <ConfirmDialog open={confirm === "confirm"} title="Confirm configuration?" confirmLabel="Confirm configuration" pending={pending === "confirm"}
-        message={`Teams: ${cfg.teamCount}, purse ${cfg.teamPurse}, squad ${cfg.maxSquadSize}, base ${cfg.defaultBasePrice}, increment ${cfg.bidIncrement}, finalization ${cfg.finalizationSeconds}s. Every team must have an active captain.`}
+        message={`Teams: ${cfg.teamCount}, purse ${cfg.teamPurse}, squad ${cfg.maxSquadSize}, base ${cfg.defaultBasePrice}, raises +${(cfg.bidIncrements || [3, 5]).join(" or +")}, finalization ${cfg.finalizationSeconds}s. Every team must have an active captain.`}
         onClose={() => setConfirm(null)} onConfirm={async () => { const r = await run("confirm", () => post("/admin/config/confirm"), "Configuration confirmed: auction is READY"); if (r.ok) { setConfirm(null); reload(); } }} />
       <ConfirmDialog open={confirm === "archive"} title={`Archive ${data.season.name}?`} confirmLabel="Archive auction" tone="danger" pending={pending === "archive"}
         message="This auction becomes read-only history and its captains are signed out. You can then create a new auction."

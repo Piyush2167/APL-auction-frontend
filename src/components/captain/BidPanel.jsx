@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Gavel, Eye, Minus, Plus, Lock } from "lucide-react";
+import { Gavel, Eye, Lock } from "lucide-react";
 import { useLive } from "@/contexts/LiveContext";
 import { useToast } from "@/contexts/ToastContext";
 import { post, apiError } from "@/services/api/client";
@@ -35,23 +35,19 @@ export default function BidPanel() {
   const { state, team, emit, resync, connection, clockOffset } = useLive();
   const toast = useToast();
   const player = usePlayerForCaptain();
-  // Steps above the next valid bid; tied to the state version so they reset whenever the price moves.
-  const [steps, setSteps] = useState({ v: null, n: 0 });
-  const extraSteps = steps.v === state?.version ? steps.n : 0;
-  const setExtraSteps = (fn) => setSteps({ v: state?.version, n: typeof fn === "function" ? fn(extraSteps) : fn });
-  const [bidding, setBidding] = useState(false);
+  const [bidding, setBidding] = useState(null); // the amount being sent
   const [revealOpen, setRevealOpen] = useState(false);
   const [revealing, setRevealing] = useState(false);
   const el = eligibility(state, team);
-  const amount = state?.nextValidBid != null ? state.nextValidBid + extraSteps * (state.increment || 0) : null;
-  const overPurse = team && amount > team.finance.remainingPurse;
+  // The server lists the bids allowed now: the base price first, then the current bid plus each increment (+3, +5).
+  const options = state?.validBids ?? (state?.nextValidBid != null ? [state.nextValidBid] : []);
+  const overPurse = (amount) => team && amount > team.finance.remainingPurse;
 
-  const placeBid = async () => {
-    if (bidding || !el.ok) return;
-    setBidding(true);
+  const placeBid = async (amount) => {
+    if (bidding != null || !el.ok) return;
+    setBidding(amount);
     const res = await emit("bid:place", { playerId: state.player.id, amount, idempotencyKey: crypto.randomUUID() });
-    setBidding(false);
-    setExtraSteps(0);
+    setBidding(null);
     if (res?.ok) toast.success(`Bid of ${points(res.data.amount)} placed`);
     else { toast.error(res?.error?.message || "Bid failed"); resync(); }
   };
@@ -94,15 +90,20 @@ export default function BidPanel() {
       {state?.player && (
         <Card title="Bid">
           <BidSummary state={state} />
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="flex items-center gap-2" aria-label="Bid amount">
-              <Button size="lg" variant="outline" aria-label="Lower bid by one step" disabled={extraSteps === 0 || !el.ok} onClick={() => setExtraSteps((s) => Math.max(0, s - 1))}><Minus className="size-4" /></Button>
-              <span className="w-32 text-center text-2xl font-bold tabular-nums" aria-live="polite">{points(amount)}</span>
-              <Button size="lg" variant="outline" aria-label="Raise bid by one step" disabled={!el.ok || (team && amount + state.increment > team.finance.remainingPurse)} onClick={() => setExtraSteps((s) => s + 1)}><Plus className="size-4" /></Button>
-            </div>
-            <Button size="xl" variant="primary" className="flex-1" disabled={!el.ok || overPurse || connection !== "connected"} pending={bidding} onClick={placeBid}>
-              {state.status === "FINALIZING" ? <><Lock className="size-5" aria-hidden />Bidding locked</> : <><Gavel className="size-5" aria-hidden />Bid {points(amount)}</>}
-            </Button>
+          <div className="mt-4 grid gap-3 sm:auto-cols-fr sm:grid-flow-col">
+            {state.status === "FINALIZING" ? (
+              <Button size="xl" variant="primary" disabled><Lock className="size-5" aria-hidden />Bidding locked</Button>
+            ) : options.map((amount) => {
+              const raise = state.currentBid != null ? amount - state.currentBid : null;
+              return (
+                <Button key={amount} size="xl" variant="primary" disabled={!el.ok || overPurse(amount) || connection !== "connected" || (bidding != null && bidding !== amount)}
+                  pending={bidding === amount} onClick={() => placeBid(amount)}>
+                  <Gavel className="size-5" aria-hidden />
+                  {raise != null && <span className="rounded-full bg-ink/10 px-2 py-0.5 text-base tabular-nums">+{raise}</span>}
+                  <span className="tabular-nums">Bid {points(amount)}</span>
+                </Button>
+              );
+            })}
           </div>
           <p className={cx("mt-3 text-sm", el.ok ? "text-success" : el.leading ? "text-accent" : "text-muted")} role="status">
             {el.ok ? "You can bid." : el.reason}

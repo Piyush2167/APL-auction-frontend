@@ -70,7 +70,7 @@ export function BidSummary({ state }) {
       <div className="rounded-xl bg-surface-2 p-4">
         <p className="text-xs text-muted">Next valid bid</p>
         <p className="mt-1 font-display text-2xl tabular-nums">{points(state?.nextValidBid)}</p>
-        <p className="text-xs text-muted tabular-nums">+{state?.increment} per step · {state?.bidCount || 0} bids</p>
+        <p className="text-xs text-muted tabular-nums">Raise by +{(state?.increments || [3, 5]).join(" or +")} · {state?.bidCount || 0} bids</p>
       </div>
     </div>
   );
