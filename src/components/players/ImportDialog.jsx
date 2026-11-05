@@ -66,7 +66,7 @@ export default function ImportDialog({ open, onClose, onImported }) {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-muted">Upload a CSV or JSON file. Required: name, gender, category. Optional: image, battingStyle, bowlingStyle, skills (separated by ;), publicSkills, experience, registrationId, basePrice, playerType (NORMAL or MYSTERY). Existing players are never overwritten.</p>
+          <p className="text-sm text-muted">Upload a CSV or JSON file with the columns <b>name</b>, <b>skill</b> (one of the auction categories, e.g. Batsman or Bowler), <b>gender</b> and optionally <b>image</b> (an https URL). Players are added as Normal with the auction base price; make them Mystery later by editing them. Existing players are never overwritten.</p>
           <div className="flex flex-wrap gap-3 text-sm">
             <a href="/templates/players-template.csv" download className="inline-flex items-center gap-1 text-accent hover:underline"><Download className="size-4" aria-hidden />CSV template</a>
             <a href="/templates/players-template.json" download className="inline-flex items-center gap-1 text-accent hover:underline"><Download className="size-4" aria-hidden />JSON template</a>

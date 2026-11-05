@@ -91,7 +91,7 @@ export default function PlayersAdmin() {
           </div>
         )}
       </Card>
-      {config && <PlayerForm open={!!editing} player={editing?.id ? editing : null} categories={config.categories} defaultBasePrice={config.defaultBasePrice} sport={season.data?.season?.sport} onClose={() => setEditing(null)} onSaved={reload} />}
+      {config && <PlayerForm open={!!editing} player={editing?.id ? editing : null} categories={config.categories} defaultBasePrice={config.defaultBasePrice} onClose={() => setEditing(null)} onSaved={reload} />}
       <ImportDialog open={importing} onClose={() => setImporting(false)} onImported={reload} />
       <ConfirmDialog open={!!deleting} title={`Delete ${deleting?.name}?`} message="This permanently removes the player. Only players never put up for auction can be deleted." confirmLabel="Delete player" tone="danger"
         pending={pending === "delete"} onClose={() => setDeleting(null)}

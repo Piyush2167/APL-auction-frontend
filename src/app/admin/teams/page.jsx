@@ -7,7 +7,7 @@ import { Plus, Pencil, UserPlus, Eye } from "lucide-react";
 import { useResource } from "@/hooks/useResource";
 import { useToast } from "@/contexts/ToastContext";
 import { post, patch, apiError } from "@/services/api/client";
-import { Button, Card, PageHeader, Field, Input, Modal, Skeleton, ErrorState, EmptyState, Badge, StatusBadge, Table, Th, Td, points, dateTime } from "@/components/ui";
+import { Button, Card, PageHeader, Field, Input, Select, Modal, Skeleton, ErrorState, EmptyState, Badge, StatusBadge, Table, Th, Td, points, dateTime } from "@/components/ui";
 import { TeamLogo, PlayerImage } from "@/components/shared";
 import { uploadImage } from "@/components/players/PlayerForm";
 
@@ -18,7 +18,7 @@ const teamSchema = z.object({
   initialPurse: z.coerce.number().int().min(1, "Must be at least 1"),
   maxSquadSize: z.coerce.number().int().min(1, "Must be at least 1").max(50),
 });
-const captainSchema = z.object({ name: z.string().trim().min(2, "Enter the captain's name").max(100), email: z.email("Enter a valid email") });
+const captainSchema = z.object({ playerId: z.string(), name: z.string().trim().min(2, "Choose a player or enter the captain's name").max(100), email: z.email("Enter a valid email") });
 
 function TeamForm({ team, config, locked, onClose, onSaved }) {
   const toast = useToast();
@@ -60,18 +60,23 @@ function TeamForm({ team, config, locked, onClose, onSaved }) {
   );
 }
 
-function CaptainForm({ team, onClose, onSaved }) {
+function CaptainForm({ team, takenPlayerIds, onClose, onSaved }) {
   const toast = useToast();
-  const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(captainSchema) });
+  const players = useResource("/admin/players", { limit: 200, sort: "name" });
+  const { register, handleSubmit, setValue, setError, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(captainSchema), defaultValues: { playerId: "", name: "", email: "" } });
+  const playerField = register("playerId");
+  const options = (players.data?.rows || []).filter((p) => !takenPlayerIds.has(p.id));
   const submit = async (d) => {
     try {
-      const r = await post(`/admin/teams/${team.id}/captain`, d);
+      const r = await post(`/admin/teams/${team.id}/captain`, { name: d.name, email: d.email, ...(d.playerId ? { playerId: d.playerId } : {}) });
       if (r.emailSent) toast.success(`Captain created. Login details emailed to ${d.email}.`);
       else toast.error("Captain created, but the email could not be sent. Use “Resend login” on the Captains page.");
       onSaved(); onClose();
     } catch (e) {
       const err = apiError(e);
-      if (err.code === "EMAIL_IN_USE") setError("email", { message: err.message }); else toast.error(err.message);
+      if (err.code === "EMAIL_IN_USE") setError("email", { message: err.message });
+      else if (err.code === "PLAYER_ALREADY_CAPTAIN") setError("playerId", { message: err.message });
+      else toast.error(err.message);
     }
   };
   return (
@@ -79,6 +84,13 @@ function CaptainForm({ team, onClose, onSaved }) {
       footer={<><Button onClick={onClose}>Cancel</Button><Button variant="primary" pending={isSubmitting} onClick={handleSubmit(submit)}>Create captain and send email</Button></>}>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-4" noValidate>
         <p className="text-sm text-muted">A secure temporary password is emailed to the captain. They must set their own password at first login.</p>
+        <Field label="Choose from players" hint={players.data ? "Fills in the name. Leave empty to enter a captain who is not a registered player." : "Loading players…"} error={errors.playerId?.message}>{(a) => (
+          <Select {...a} {...playerField} disabled={!players.data}
+            onChange={(e) => { playerField.onChange(e); const p = options.find((x) => x.id === e.target.value); setValue("name", p ? p.name : "", { shouldValidate: !!p }); }}>
+            <option value="">— Not a registered player —</option>
+            {options.map((p) => <option key={p.id} value={p.id}>{p.name} · {p.category}</option>)}
+          </Select>
+        )}</Field>
         <Field label="Captain name" error={errors.name?.message}>{(a) => <Input {...a} autoComplete="off" {...register("name")} />}</Field>
         <Field label="Captain email" error={errors.email?.message}>{(a) => <Input {...a} type="email" autoComplete="off" {...register("email")} />}</Field>
       </form>
@@ -167,7 +179,7 @@ export default function TeamsPage() {
           )}
       </Card>
       {form && <TeamForm team={form} config={cfg} locked={started} onClose={() => setForm(null)} onSaved={reload} />}
-      {captainFor && <CaptainForm team={captainFor} onClose={() => setCaptainFor(null)} onSaved={reload} />}
+      {captainFor && <CaptainForm team={captainFor} takenPlayerIds={new Set((data || []).filter((t) => t.id !== captainFor.id && t.captainPlayer).map((t) => t.captainPlayer.id))} onClose={() => setCaptainFor(null)} onSaved={reload} />}
       {detail && <TeamDetail id={detail} onClose={() => setDetail(null)} />}
     </>
   );

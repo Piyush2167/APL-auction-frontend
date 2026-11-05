@@ -1,24 +1,4 @@
 [
-  {
-    "name": "Rahul Sharma",
-    "gender": "Male",
-    "category": "Batsman",
-    "battingStyle": "Right-hand bat",
-    "skills": ["Opener", "Anchor"],
-    "experience": "3 seasons",
-    "registrationId": "APL-001",
-    "basePrice": 20,
-    "playerType": "NORMAL"
-  },
-  {
-    "name": "Amit Kumar",
-    "gender": "Male",
-    "category": "Bowler",
-    "bowlingStyle": "Right-arm fast",
-    "skills": ["Yorkers", "Swing"],
-    "publicSkills": ["Swing"],
-    "registrationId": "APL-002",
-    "basePrice": 30,
-    "playerType": "MYSTERY"
-  }
+  { "name": "Rahul Sharma", "skill": "Batsman", "gender": "Male" },
+  { "name": "Amit Kumar", "skill": "Bowler", "gender": "Male", "image": "https://example.com/amit.jpg" }
 ]
